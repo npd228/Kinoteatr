@@ -1,0 +1,629 @@
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    background: #651905;
+    color: #fff;
+    font-family: "Roboto", Arial, sans-serif;
+    font-size: 12px;
+}
+
+button,
+select {
+    font: inherit;
+}
+
+button {
+    cursor: pointer;
+}
+
+.page {
+    width: min(100%, 1180px);
+    min-height: 100vh;
+    margin: 0 auto;
+    padding: 0;
+    background: #651905;
+}
+
+/* ПЕРВЫЙ ЭКРАН */
+
+.movie {
+    position: relative;
+    isolation: isolate;
+    min-height: 495px;
+    padding: 0 0 40px;
+    overflow: hidden;
+
+    background-color: #651905;
+    background-image:
+        linear-gradient(
+            90deg,
+            rgba(25, 5, 10, 0.68) 0%,
+            rgba(25, 5, 10, 0.28) 62%,
+            rgba(25, 5, 10, 0.15) 100%
+        ),
+        linear-gradient(
+            to bottom,
+            rgba(30, 5, 10, 0.08) 0%,
+            rgba(70, 12, 5, 0.12) 48%,
+            #651905 100%
+        ),
+        url("images/movie-bg.jpg");
+
+    background-position: center, center, center 30%;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* ШАПКА САЙТА */
+
+.header {
+    position: relative;
+    z-index: 5;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+
+    width: 100%;
+    padding: 24px 5.2%;
+    background: transparent;
+}
+
+/* ЛОГОТИП */
+
+.logo {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+
+    color: #fff;
+    font-size: 25px;
+    text-decoration: none;
+}
+
+/* НАВИГАЦИЯ */
+
+.navigation {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 25px;
+}
+
+.navigation a {
+    position: relative;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 400;
+    text-decoration: none;
+    white-space: nowrap;
+    opacity: 0.92;
+    transition: opacity 0.2s ease;
+}
+
+.navigation a:hover {
+    opacity: 0.65;
+}
+
+/* ПРОФИЛЬ */
+
+.profile {
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    gap: 10px;
+
+    color: #fff;
+    font-size: 12px;
+    text-decoration: none;
+    white-space: nowrap;
+}
+
+/* ИНФОРМАЦИЯ О ФИЛЬМЕ */
+
+.movie__info {
+    position: relative;
+    z-index: 2;
+
+    width: min(490px, 52%);
+    padding-top: 55px;
+    margin-left: 5.2%;
+}
+
+.movie__subtitle {
+    margin: 0 0 14px;
+    color: #c5a8a0;
+    font-size: 20px;
+    font-weight: 400;
+}
+
+.movie h1 {
+    margin: 0 0 20px;
+    color: #fff;
+    font-size: clamp(22px, 3vw, 30px);
+    line-height: 1.2;
+    font-weight: 700;
+}
+
+.movie__description {
+    max-width: 525px;
+    margin: 0;
+    color: #f0d9d0;
+    font-size: 13px;
+    line-height: 1.65;
+}
+
+/* ДЛИТЕЛЬНОСТЬ И РЕЙТИНГ */
+
+.movie__meta {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    margin-top: 38px;
+}
+
+.movie__meta > span {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.imdb {
+    padding: 2px 4px;
+    background: #f5c518;
+    color: #111;
+    font-size: 9px;
+    font-weight: 700;
+}
+
+.movie__meta strong {
+    font-size: 20px;
+}
+
+.movie__meta > span:last-child {
+    gap: 6px;
+}
+
+/* КНОПКА ТРЕЙЛЕРА */
+
+.play {
+    position: absolute;
+    z-index: 3;
+    top: 47%;
+    right: 20%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    width: 88px;
+    height: 88px;
+    padding: 0;
+
+    border: none;
+    border-radius: 50%;
+    background: #fff;
+    color: #e52213;
+    font-size: 0;
+
+    transition: transform 0.2s ease;
+}
+
+.play::after {
+    content: "";
+    width: 0;
+    height: 0;
+    margin-left: 7px;
+
+    border-top: 19px solid transparent;
+    border-bottom: 19px solid transparent;
+    border-left: 32px solid #e52213;
+}
+
+.play:hover {
+    transform: scale(1.07);
+}
+
+/* ВЫБОР СЕАНСА */
+
+.booking {
+    padding: 0 5% 50px;
+}
+
+.booking__filters {
+    display: grid;
+    grid-template-columns: 1.3fr 2fr 0.8fr;
+    gap: 24px;
+
+    padding: 25px 0 30px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.22);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+}
+
+.filter label {
+    display: block;
+    margin-bottom: 12px;
+    color: #f1d5cc;
+    font-size: 11px; /* Исправлено: свойство собрано воедино */
+}
+
+.dates {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.date {
+    display: flex;
+    min-width: 42px;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+
+    padding: 7px 5px;
+
+    border: 1px solid #9b5745;
+    border-radius: 3px;
+    background: transparent;
+    color: #fff;
+}
+
+.date strong {
+    font-size: 18px;
+}
+
+.date small {
+    font-size: 10px;
+}
+
+.date--active {
+    border-color: #ff9900;
+    background: #ff9900;
+    color: #fff;
+}
+
+.filter select {
+    width: 100%;
+    min-height: 40px;
+    padding: 0 10px;
+
+    border: 1px solid #a75c43;
+    border-radius: 3px;
+    background: #80321d;
+    color: #fff;
+}
+
+.filter select:focus {
+    outline: 1px solid #ff9900;
+}
+
+/* КИНОЗАЛ */
+
+.hall {
+    margin-top: 30px;
+    padding: 25px 5% 20px;
+    background: rgba(65, 19, 9, 0.45);
+}
+
+.screen {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+
+    width: 95%;
+    height: 65px;
+    margin: 0 auto 20px;
+    padding-top: 9px;
+
+    border-top: 5px solid #451309;
+
+    background: linear-gradient(
+        to bottom,
+        rgba(255, 221, 192, 0.2),
+        transparent
+    );
+
+    clip-path: polygon(0 0, 100% 0, 85% 100%, 15% 100%);
+}
+
+.screen span {
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 10px;
+    letter-spacing: 3px;
+}
+
+/* МЕСТА */
+
+.seats {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.seat-row {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+    width: 100%;
+}
+
+.seat {
+    width: 19px;
+    height: 17px;
+    flex: 0 1 19px;
+    min-width: 0;
+    padding: 0;
+
+    border: 1px solid #b47c68;
+    border-radius: 4px;
+    background: #92513c;
+
+    box-shadow: inset 0 -4px rgba(45, 12, 5, 0.45);
+}
+
+.seat:hover:not(:disabled) {
+    border-color: #fff;
+}
+
+.seat.selected {
+    border-color: #ff9b00;
+    background: #ff9b00;
+    box-shadow: inset 0 -4px #c86c00;
+}
+
+.seat.occupied,
+.seat:disabled {
+    border-color: #633326;
+    background: #633326;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.aisle {
+    width: 12px;
+    flex-shrink: 1;
+}
+
+/* ЛЕГЕНДА */
+
+.legend {
+    display: flex;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    gap: 24px;
+
+    margin-top: 25px;
+    padding-top: 15px;
+
+    border-top: 1px solid rgba(255, 255, 255, 0.15);
+    color: #d8b9ad;
+    font-size: 10px;
+}
+
+.legend span {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.seat-icon {
+    display: inline-block;
+    width: 14px;
+    height: 12px;
+
+    border: 1px solid #b47c68;
+    border-radius: 3px;
+    background: #92513c;
+}
+
+.selected-icon {
+    border-color: #ff9b00;
+    background: #ff9b00;
+}
+
+.occupied-icon {
+    border-color: #633326;
+    background: #633326;
+}
+
+/* ОПЛАТА */
+
+.checkout {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 30px 0;
+}
+
+.checkout p {
+    margin: 0 0 8px;
+}
+
+.checkout strong {
+    font-size: 32px;
+    font-weight: 400;
+}
+
+.seat-count {
+    margin-top: 8px !important;
+    color: #d8b9ad;
+    font-size: 11px;
+}
+
+.pay {
+    padding: 15px 28px;
+    border: none;
+    border-radius: 3px;
+    background: #ff9900;
+    color: #fff;
+    transition: background 0.2s ease;
+}
+
+.pay:hover {
+    background: #ffb12e;
+}
+
+/* ПЛАНШЕТЫ */
+
+@media (max-width: 850px) { /* Исправлено: добавлен @media */
+    .header {
+        flex-wrap: wrap;
+        gap: 18px;
+        padding: 20px 4%;
+    }
+
+    .navigation {
+        flex-wrap: wrap;
+        gap: 15px;
+    }
+
+    .navigation a {
+        font-size: 11px;
+    }
+
+    .movie__info {
+        width: 60%;
+        margin-left: 4%;
+    }
+
+    .play {
+        right: 8%;
+    }
+
+    .booking__filters {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .filter--dates {
+        grid-column: 1 / -1;
+    }
+}
+
+/* ТЕЛЕФОНЫ */
+
+@media (max-width: 600px) { /* Исправлено: добавлен @media */
+    .movie {
+        min-height: 620px;
+        background-position: center, center, 55% center;
+    }
+
+    .header {
+        flex-wrap: wrap;
+        gap: 16px;
+        padding: 18px 5%;
+    }
+
+    .navigation {
+        order: 3;
+        width: 100%;
+        gap: 12px;
+    }
+
+    .navigation a {
+        font-size: 11px;
+    }
+
+    .profile {
+        margin-left: auto;
+        gap: 7px;
+    }
+
+    .movie__info {
+        width: auto;
+        padding-top: 35px;
+        margin: 0 5%;
+    }
+
+    .movie__subtitle {
+        font-size: 16px;
+    }
+
+    .movie h1 {
+        font-size: 23px;
+    }
+
+    .movie__description {
+        font-size: 12px;
+    }
+
+    .movie__meta {
+        gap: 18px;
+        margin-top: 25px;
+    }
+
+    .play {
+        top: auto;
+        right: 7%;
+        bottom: 25px;
+        width: 58px;
+        height: 58px;
+    }
+
+    .play::after {
+        border-top-width: 12px;
+        border-bottom-width: 12px;
+        border-left-width: 20px;
+    }
+
+    .booking {
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+    .booking__filters {
+        grid-template-columns: 1fr;
+    }
+
+    .filter--dates {
+        grid-column: auto;
+    }
+
+    .hall {
+        padding-right: 8px;
+        padding-left: 8px;
+        overflow: hidden;
+    }
+
+    .seat-row {
+        gap: 3px;
+    }
+
+    .seat {
+        height: 13px;
+    }
+
+    .aisle {
+        width: 5px;
+    }
+
+    .legend {
+        gap: 10px;
+    }
+
+    .checkout {
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+    .checkout strong {
+        font-size: 25px;
+    }
+
+    .pay {
+        width: 100%;
+        padding: 13px;
+    }
+}

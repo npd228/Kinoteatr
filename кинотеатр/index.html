@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Cinema Booking</title>
+
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
+  >
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link
+    href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  >
+
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    .profile {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .profile__avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid #fff;
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+
+    <section class="movie" id="home">
+      <header class="header">
+        <a href="#home" class="logo" aria-label="Cinema Booking">▧</a>
+
+        <nav class="navigation">
+          <a href="#home">Главная</a>
+          <a href="#movies">Фильмы</a>
+          <a href="#cinemas">Кинотеатры</a>
+          <a href="#events">События</a>
+          <a href="#gifts">Подарочные карты</a>
+        </nav>
+
+        <a href="#profile" class="profile">
+          <img src="img/avatar.jpg" alt="Аватар Даши" class="profile__avatar">
+          <span>Привет, Мила! 👤</span>
+        </a>
+      </header>
+
+      <div class="movie__info">
+        <p class="movie__subtitle">Avengers: Infinity War</p>
+
+        <h1>Мстители: война бесконечности</h1>
+
+        <p class="movie__description">
+          Пока Мстители и их союзники продолжают защищать мир
+          от опасностей, с которыми не смог бы справиться один
+          супергерой, новая угроза возникает из космоса.
+          Танос преследует цель собрать все камни бесконечности —
+          артефакты невероятной силы, с помощью которых можно
+          изменить реальность по своему желанию.
+        </p>
+
+        <div class="movie__meta">
+          <span>◷ 240 мин.</span>
+          <span>
+            <b class="imdb">IMDb</b>
+            <strong>9.2</strong> / 10
+          </span>
+        </div>
+      </div>
+
+      <button
+        class="play"
+        id="playTrailer"
+        type="button"
+        aria-label="Воспроизвести трейлер"
+      >▶</button>
+    </section>
+
+    <section class="booking" id="movies">
+
+      <div class="booking__filters">
+
+        <div class="filter filter--dates">
+          <label>Дата</label>
+
+          <div class="dates" id="dates">
+            <button class="date" type="button" data-date="27">
+              <small>АПР</small>
+              <strong>27</strong>
+              <small>ПТ</small>
+            </button>
+
+            <button
+              class="date date--active"
+              type="button"
+              data-date="28"
+              aria-pressed="true"
+            >
+              <small>АПР</small>
+              <strong>28</strong>
+              <small>СБ</small>
+            </button>
+
+            <button
+              class="date"
+              type="button"
+              data-date="29"
+              aria-pressed="false"
+            >
+              <small>АПР</small>
+              <strong>29</strong>
+              <small>ВС</small>
+            </button>
+
+            <button
+              class="date"
+              type="button"
+              data-date="30"
+              aria-pressed="false"
+            >
+              <small>АПР</small>
+              <strong>30</strong>
+              <small>ПН</small>
+            </button>
+          </div>
+        </div>
+
+        <div class="filter">
+          <label for="cinema">Кинотеатр</label>
+
+          <select id="cinema">
+            <option value="october">Октябрь, ул. Калужская 28</option>
+            <option value="central">Центральный кинотеатр</option>
+            <option value="city">Сити кинотеатр</option>
+          </select>
+        </div>
+
+        <div class="filter filter--time">
+          <label for="time">Время</label>
+
+          <select id="time">
+            <option value="23:00">23:00</option>
+            <option value="18:30">18:30</option>
+            <option value="20:00">20:00</option>
+          </select>
+        </div>
+
+      </div>
+
+      
+      <section class="hall" aria-label="Схема кинозала">
+
+        <div class="screen">
+          <span>ЭКРАН</span>
+        </div>
+
+        <div class="seats" id="seats"></div>
+
+        <div class="legend">
+          <span>
+            <i class="seat-icon free-icon"></i>
+            Свободно
+          </span>
+
+          <span>
+            <i class="seat-icon selected-icon"></i>
+            Выбрано
+          </span>
+
+          <span>
+            <i class="seat-icon occupied-icon"></i>
+            Занято
+          </span>
+        </div>
+
+      </section>
+
+      
+      <footer class="checkout">
+        <div>
+          <p>Всего к оплате</p>
+          <strong id="total">0 ₽</strong>
+          <p id="seatCount" class="seat-count">Места не выбраны</p>
+        </div>
+
+        <button class="pay" id="pay" type="button">
+          Перейти к оплате
+        </button>
+      </footer>
+
+    </section>
+  </main>
+
+  <script>
+    "use strict";
+
+    const seatsContainer = document.getElementById("seats");
+    const totalElement = document.getElementById("total");
+    const seatCountElement = document.getElementById("seatCount");
+    const cinemaSelect = document.getElementById("cinema");
+    const timeSelect = document.getElementById("time");
+
+    const ticketPrice = 800;
+    const selectedSeats = new Set();
+
+    const occupiedSeatsBySession = {
+      october: {
+        "23:00": [
+          "1-4", "1-5", "1-12", "1-13",
+          "2-3", "2-8", "2-15",
+          "3-6", "3-11", "3-14",
+          "4-2", "4-9", "4-17",
+          "5-4", "5-5", "5-14",
+          "6-7", "6-12", "6-16",
+          "7-3", "7-10"
+        ],
+        "18:30": [
+          "1-2", "1-8", "1-9",
+          "2-5", "2-6", "2-14",
+          "3-3", "3-12",
+          "4-4", "4-5", "4-15",
+          "5-2", "5-11", "5-12",
+          "6-4", "6-9", "7-6"
+        ],
+        "20:00": [
+          "1-6", "1-7", "1-16",
+          "2-2", "2-10", "2-11",
+          "3-4", "3-5", "3-15",
+          "4-7", "4-12",
+          "5-6", "5-7", "5-16",
+          "6-2", "6-14", "7-8"
+        ]
+      },
+      central: {
+        "23:00": [
+          "1-1", "1-3", "1-10",
+          "2-4", "2-9", "2-16",
+          "3-2", "3-8", "3-17",
+          "4-5", "4-6", "4-13",
+          "5-3", "5-8", "5-15",
+          "6-5", "6-10", "7-4"
+        ],
+        "18:30": [
+          "1-5", "1-6", "1-14",
+          "2-1", "2-7", "2-12",
+          "3-7", "3-9", "3-16",
+          "4-3", "4-10", "4-16",
+          "5-5", "5-9", "5-13",
+          "6-3", "6-11", "7-7"
+        ],
+        "20:00": [
+          "1-4", "1-11", "1-12",
+          "2-3", "2-13", "2-17",
+          "3-1", "3-10", "3-13",
+          "4-1", "4-8", "4-14",
+          "5-2", "5-6", "5-17",
+          "6-6", "6-13", "7-9"
+        ]
+      },
+      city: {
+        "23:00": [
+          "1-7", "1-8", "1-15",
+          "2-2", "2-5", "2-11",
+          "3-4", "3-14", "3-18",
+          "4-6", "4-7", "4-12",
+          "5-4", "5-10", "5-16",
+          "6-2", "6-8", "7-5"
+        ],
+        "18:30": [
+          "1-3", "1-9", "1-17",
+          "2-6", "2-8", "2-10",
+          "3-5", "3-11", "3-15",
+          "4-2", "4-11", "4-17",
+          "5-3", "5-7", "5-14",
+          "6-5", "6-15", "7-2"
+        ],
+        "20:00": [
+          "1-2", "1-13", "1-18",
+          "2-4", "2-14", "2-15",
+          "3-6", "3-8", "3-12",
+          "4-4", "4-9", "4-15",
+          "5-5", "5-11", "5-18",
+          "6-3", "6-12", "7-6"
+        ]
+      }
+    };
+
+    function getOccupiedSeats() {
+      const cinema = cinemaSelect.value;
+      const time = timeSelect.value;
+      const seats = occupiedSeatsBySession[cinema]?.[time] || [];
+      return new Set(seats);
+    }
+
+    function updateTotal() {
+      const count = selectedSeats.size;
+      const total = count * ticketPrice;
+
+      totalElement.textContent = total.toLocaleString("ru-RU") + " ₽";
+      
+      seatCountElement.textContent = count === 0
+        ? "Места не выбраны"
+        : "Выбрано мест: " + count;
+    }
+
+    function createSeats() {
+      seatsContainer.innerHTML = "";
+      const occupiedSeats = getOccupiedSeats();
+
+      for (let row = 1; row <= 7; row++) {
+        const rowElement = document.createElement("div");
+        rowElement.className = "seat-row";
+
+        for (let seat = 1; seat <= 18; seat++) {
+          if (row >= 5 && seat === 10) {
+            const aisle = document.createElement("span");
+            aisle.className = "aisle";
+            aisle.setAttribute("aria-hidden", "true");
+            rowElement.appendChild(aisle);
+          }
+
+          const seatId = row + "-" + seat;
+          const button = document.createElement("button");
+
+          button.type = "button";
+          button.className = "seat";
+          button.setAttribute("aria-label", "Ряд " + row + ", место " + seat);
+          button.title = "Ряд " + row + ", место " + seat;
+
+          if (occupiedSeats.has(seatId)) {
+            button.classList.add("occupied");
+            button.disabled = true;
+            button.setAttribute("aria-label", "Ряд " + row + ", место " + seat + ", занято");
+          } else {
+            button.setAttribute("aria-pressed", "false");
+
+            button.addEventListener("click", function () {
+              if (selectedSeats.has(seatId)) {
+                selectedSeats.delete(seatId);
+                button.classList.remove("selected");
+                button.setAttribute("aria-pressed", "false");
+              } else {
+                selectedSeats.add(seatId);
+                button.classList.add("selected");
+                button.setAttribute("aria-pressed", "true");
+              }
+              updateTotal();
+            });
+          }
+          rowElement.appendChild(button);
+        }
+        seatsContainer.appendChild(rowElement);
+      }
+    }
+
+    function resetBooking() {
+      selectedSeats.clear();
+      createSeats();
+      updateTotal();
+    }
+
+    document.querySelectorAll(".date").forEach(function (button) {
+      button.addEventListener("click", function () {
+        document.querySelectorAll(".date").forEach(function (dateButton) {
+          dateButton.classList.remove("date--active");
+          dateButton.setAttribute("aria-pressed", "false");
+        });
+        button.classList.add("date--active");
+        button.setAttribute("aria-pressed", "true");
+        resetBooking();
+      });
+    });
+
+    cinemaSelect.addEventListener("change", resetBooking);
+    timeSelect.addEventListener("change", resetBooking);
+
+    document.getElementById("playTrailer").addEventListener("click", function () {
+      alert("Трейлер пока не подключён.");
+    });
+
+    document.getElementById("pay").addEventListener("click", function () {
+      if (selectedSeats.size === 0) {
+        alert("Сначала выберите свободные места.");
+        return;
+      }
+
+      const seatsList = Array.from(selectedSeats)
+        .sort(function (a, b) {
+          const [rowA, seatA] = a.split("-").map(Number);
+          const [rowB, seatB] = b.split("-").map(Number);
+          return rowA - rowB || seatA - seatB;
+        })
+        .join(", ");
+
+      alert(
+        "Ваш заказ:\n" +
+        "Кинотеатр: " + cinemaSelect.options[cinemaSelect.selectedIndex].text +
+        "\nВремя: " + timeSelect.value +
+        "\nМеста: " + seatsList +
+        "\nКоличество билетов: " + selectedSeats.size +
+        "\nСумма: " + (selectedSeats.size * ticketPrice).toLocaleString("ru-RU") + " ₽\n\n" +
+        "Демонстрационная версия: оплата не выполняется."
+      );
+    });
+
+    createSeats();
+    updateTotal();
+  </script>
+</body>
+</html>
